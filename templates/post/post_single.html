@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог - пост: {{ post.id }}</title>
+</head>
+<body>
+{{ post.create }} <br/>
+<a href="{% url 'post_single' pk=post.id %}"> {{ post.title }} </a><br/>
+{% if post.image %}
+    <img src="{{ MEDIA_URL }}{{ post.image.url }}" style="width: 300px; height: 300px;" /> <br />
+{% endif %}
+{{ post.text }} <br/>
+Обновлено: {{ post.update }} <hr/>
+</body>
+</html>
