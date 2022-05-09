@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% load post_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +7,39 @@
     <title>Блог - список статей</title>
 </head>
 <body>
-{% for post in posts %}
-    {{ post.create }} <br/>
-    <a href="{% url 'post_single' pk=post.id %}"> {{ post.title }} </a><br/>
-    {% if post.image %}
-        <img src="{{ MEDIA_URL }}{{ post.image.url }}" style="width: 300px; height: 300px;" /> <br />
+{% block content %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Статьи</h1>
+    </div>
+    <!-- Content -->
+    {% get_verified_emails as verified %}
+    {% if user.email in verified %}
+        <a class="nav-link" href="{% url 'post_create' %} ">
+            <span>Создать статью</span></a>
     {% endif %}
-    {{ post.text }} <hr/>
-{% endfor %}
+    {% for post in posts %}
+        <!-- Approach -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ post.category }} </h6>
+            </div>
+            <div class="card-body">
+                <p>Создан: {{ post.create }} </p>
+                <p>Автор: {{ post.author }} </p>
+                <p class="mb-0">
+                    <a href="{{ post.get_absolut_url }}"> {{ post.title }} </a> <br/>
+                    {% if post.image %}
+                        <img src="{{ MEDIA_URL }}{{ post.image.url }}" style="width: 300px; height: 300px;" alt=""/>
+                        <br/>
+                    {% endif %}
+                    {{ post.text|safe|truncatewords:15 }}<br/>
+                    Обновлен: {{ post.update }}
+                <hr/>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}
 </body>
 </html>

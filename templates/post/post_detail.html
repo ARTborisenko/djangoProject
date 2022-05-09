@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог - пост: {{ post.id }}</title>
+</head>
+<body>
+{% block content %}
+    {% if post.moder %}
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Блог - пост: {{ post.id }}</h1>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ post.category }} </h6>
+            </div>
+            <div class="card-body">
+                <p>Создан: {{ post.create }} </p>
+                <p>Автор: {{ post.author }} </p>
+                <p class="mb-0">
+                    <a href="{{ post.get_absolut_url }}"> {{ post.title }} </a> <br/>
+                    {% if post.image %}
+                        <img src="{{ MEDIA_URL }}{{ post.image.url }}" style="width: 300px; height: 300px;" alt=""/>
+                        <br/>
+                    {% endif %}
+                    {{ post.text|safe }}<br/>
+                    Обновлен: {{ post.update }}
+                    {% if post.author == request.user %}
+                        <a class="nav-link" href="{% url 'post_update' pk=post.id %} ">
+                            <span>Изменить</span></a>
+                    {% endif %}
+                <hr/>
+            </div>
+        </div>
+
+        <form action="{% url 'action' post.id %}" method="POST">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>
+                        Сообщение
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <textarea name="text" required="" rows="4" cols="100"></textarea>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Отправить отклик">
+        </form>
+        <hr/>
+        Опубликованные отзывы:<br/>
+        <hr/>
+        {% for comment in post.commentpost_set.all %}
+            {% if comment.moder %}
+                {{ comment.user }} <br/>
+                {{ comment.text }} <br/>
+                {{ comment.update }} <br/>
+                <hr/>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Пост {{ post.id }} находится на модерации </h1>
+        </div>
+    {% endif %}
+{% endblock content %}
+</body>
+</html>

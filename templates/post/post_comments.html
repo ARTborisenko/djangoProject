@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог - список статей</title>
+</head>
+<body>
+{% block content %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Новые комментарии</h1>
+    </div>
+    <!-- Content -->
+    {% for comment in comments %}
+        {% if comment.post.author == request.user %}
+            <!-- Approach -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Автор: {{ comment.user }} </h6>
+                </div>
+                <div class="card-body">
+                    <p> {{ comment.create }} </p>
+                    <p class="mb-0">
+                        {{ comment.text }}<br/>
+                        Обновлен: {{ comment.update }}
+                    <form action="{% url 'action2' comment.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Подтвердить отклик">
+                    </form>
+                    <hr/>
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock content %}
+</body>
+</html>

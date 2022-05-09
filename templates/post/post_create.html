@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Новый пост
+{% endblock title %}
+
+{% block content %}
+    {% if post.author == request.user %}
+        <h3>Информация о статье</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p | safe }}
+            {{ form.media}}
+            <input type="submit" value="Отправить на модерацию">
+        </form>
+    {% endif %}
+{% endblock content %}

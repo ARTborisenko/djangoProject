@@ -1,0 +1,7 @@
+{% extends "account/email/base_message.txt" %}
+{% load account %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Привет {{ user_display }} !! Если ты хочешь стать автором и добавлять новые статьи на сайт: {{ site_domain }}, подтверждай свою почту по ссылке и айда пилить контент!.
+
+Для подтверждения почты кликай по ссылке: {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock %}
