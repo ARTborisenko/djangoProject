@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог - список статей</title>
+</head>
+<body>
+{% block content %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Все комментарии</h1>
+    </div>
+    <!-- Content -->
+    <form method="GET">
+        {{ filter.form }}
+        <input type="submit" value="Найти">
+    </form>
+
+    {% for comment in comments %}
+        <!-- Approach -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Автор: {{ comment.user }} </h6>
+            </div>
+            <div class="card-body">
+                <p> {{ comment.create }} </p>
+                <p class="mb-0">
+                    {{ comment.text }}<br/>
+                    Обновлен: {{ comment.update }}
+                <form action="{% url 'action2' comment.id %}" method="POST">
+                    {% csrf_token %}
+                    {% if not comment.moder %}
+                        <input type="submit" value="Подтвердить отклик">
+                    {% endif %}
+                </form>
+                <hr/>
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}
+</body>
+</html>

@@ -1,4 +1,22 @@
 from django.contrib import admin
-from .models import Post
+from django import forms
+from .models import Post, Category, CommentPost, Mailing
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-admin.site.register(Post)
+
+class PostAdminForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
+class PostAdmin(admin.ModelAdmin):
+    form = PostAdminForm
+
+
+admin.site.register(Post, PostAdmin)
+admin.site.register(Mailing)
+admin.site.register(Category)
+admin.site.register(CommentPost)
